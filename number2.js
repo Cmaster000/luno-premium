@@ -1,17 +1,21 @@
-var myHeaders = new Headers();
-myHeaders.append("apikey", "DBzpTQn4QRVccyr7H2ddRCC4FmrP6dhH");
+require('dotenv').config()
 
-var requestOptions = {
-  method: 'GET',
-  redirect: 'follow',
-  headers: myHeaders
-};
+async function exchangeRate() {
+  let myHeader = new Headers()
+  myHeader.append(process.env.YOUR_NAME, process.env.API_VALUE)
 
-let res = undefined
+  let requestOptions = {
+    method: 'GET',
+    redirect: 'follow',
+    headers: myHeader
+  };
 
-fetch("https://api.apilayer.com/exchangerates_data/latest?symbols=usd&base=myr", requestOptions)
-  .then(response => response.text())
-  //.then(result => console.log(result))
-  .then(result => res = result)
-  .then(console.log(res))
-  .catch(error => console.log('error', error));
+  const exResponse = await fetch("https://api.apilayer.com/fixer/convert?to=myr&from=usd&amount=1", requestOptions)
+  const exResults = await exResponse.json()
+  console.log(exResults.result)
+  return +exResults.result
+    // response => response.text()
+    // result => console.log(result)
+    // error => console.log('error', error);
+}
+exchangeRate()
